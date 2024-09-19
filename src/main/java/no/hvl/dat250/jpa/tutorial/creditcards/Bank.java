@@ -8,6 +8,10 @@ public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
+
+    @OneToMany(mappedBy = "bank", cascade = CascadeType.ALL)
+    private Collection<CreditCard> ownedCards;
 
     public Long getId() {
         return id;
@@ -15,11 +19,19 @@ public class Bank {
 
     public String getName() {
         // TODO: implement method!
-        return null;
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Collection<CreditCard> getOwnedCards() {
         // TODO: implement method!
-        return null;
+        return ownedCards;
+    }
+
+    public void setOwnedCards(Collection<CreditCard> ownedCards) {
+        this.ownedCards = ownedCards;
     }
 }
