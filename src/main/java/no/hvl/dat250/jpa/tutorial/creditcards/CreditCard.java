@@ -2,6 +2,9 @@ package no.hvl.dat250.jpa.tutorial.creditcards;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 public class CreditCard {
 
@@ -12,14 +15,15 @@ public class CreditCard {
     private Integer balance;
     private Integer creditLimit;
 
-    @ManyToOne
-    private Customer owner;
+    @ManyToMany(mappedBy = "creditCards")
+    private Set<Customer> cardOwners = new HashSet<>();
+
 
     @ManyToOne
     private Pincode pincode;
 
     @ManyToOne
-    private Bank bank;
+    private Bank owningBank;
 
 
     public Integer getNumber() {
@@ -60,21 +64,19 @@ public class CreditCard {
 
     public Bank getOwningBank() {
         // TODO: implement method!
-        return bank;
+        return owningBank;
     }
 
     public void setOwningBank(Bank bank) {
-        this.bank = bank;
-    }
-    public void setBank(Bank bank) {
-        this.bank = bank;
+        this.owningBank = owningBank;
     }
 
-    public Customer getOwner(){
-        return owner;
+
+    public Set<Customer> getCardOwners() {
+        return cardOwners;
     }
 
-    public void setOwner(Customer owner){
-        this.owner = owner;
+    public void setCardOwners(Set<Customer> cardOwners) {
+        this.cardOwners = cardOwners;
     }
 }

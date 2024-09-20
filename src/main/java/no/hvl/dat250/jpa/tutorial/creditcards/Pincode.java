@@ -2,7 +2,7 @@ package no.hvl.dat250.jpa.tutorial.creditcards;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
+import java.util.*;
 
 @Entity
 public class Pincode {
@@ -14,7 +14,7 @@ public class Pincode {
 
 
     @OneToMany(mappedBy = "pincode", cascade = CascadeType.ALL)
-    private Collection<CreditCard> creditCards;
+    private Set<CreditCard> creditCards = new HashSet<>();
 
 
     public Long getId() {
@@ -39,11 +39,11 @@ public class Pincode {
         this.count = count;
     }
 
-    public Collection<CreditCard> getCreditCards(){
+    public Set<CreditCard> getCreditCards(){
         return creditCards;
     }
 
-    public void setCreditCard(Collection<CreditCard> creditCards) {
+    public void setCreditCard(Set<CreditCard> creditCards) {
         this.creditCards = creditCards;
     }
 }

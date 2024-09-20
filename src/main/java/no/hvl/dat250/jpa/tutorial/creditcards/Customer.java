@@ -1,6 +1,7 @@
 package no.hvl.dat250.jpa.tutorial.creditcards;
 
-import java.util.Collection;
+import java.util.*;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,11 +11,14 @@ public class Customer {
     private Long id;
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Collection<Address> addresses;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Address> addresses = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Collection<CreditCard> creditCards;
+    @ManyToMany
+    @JoinTable(name = "customer_creditcard",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "creditcard_id"))
+    private Set<CreditCard> creditCards = new HashSet<>();
 
 
     public String getName() {
@@ -25,19 +29,20 @@ public class Customer {
         this.name = name;
     }
 
-    public Collection<Address> getAddresses() {
+    public Set<Address> getAddresses() {
         return addresses;
     }
 
-    public void setCreditCards(Collection<CreditCard> creditCards) {
+    public void setCreditCards(Set<CreditCard> creditCards) {
         this.creditCards = creditCards;
     }
 
-    public Collection<CreditCard> getCreditCards() {
+    public Set<CreditCard> getCreditCards() {
         return creditCards;
+
     }
 
-    public void setAddresses(Collection<Address> addresses) {
+    public void setAddresses(Set<Address> addresses) {
         this.addresses = addresses;
     }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import no.hvl.dat250.jpa.tutorial.creditcards.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CreditCardsMain {
@@ -17,57 +18,55 @@ public class CreditCardsMain {
       em.getTransaction().begin();
       createObjects(em);
       em.getTransaction().commit();
+
     }
 
   }
 
   private static void createObjects(EntityManager em) {
     // TODO: Create object world as shown in the README.md.
-    // Create customer
-    Customer customer = new Customer();
-    customer.setName("Max Mustermann");
+    Customer owner = new Customer();
+    owner.setName("Max Mustermann");
+    em.persist(owner);
 
-    // Create address
     Address address = new Address();
     address.setStreet("Inndalsveien");
     address.setNumber(28);
-    customer.setAddresses(Arrays.asList(address));
+    em.persist(address);
 
-    // Create bank (must persist the bank first before assigning it to credit cards)
+    CreditCard card1 = new CreditCard();
+    card1.setNumber(12345);
+    card1.setBalance(-5000);
+    card1.setCreditLimit(-10000);
+    em.persist(card1);
+
+    CreditCard card2 = new CreditCard();
+    card2.setNumber(123);
+    card2.setBalance(1);
+    card2.setCreditLimit(2000);
+    em.persist(card2);
+
+    Pincode pin = new Pincode();
+    pin.setCode("123");
+    pin.setCount(1);
+    em.persist(pin);
+
     Bank bank = new Bank();
     bank.setName("Pengebank");
-
-    // Persist the bank first
     em.persist(bank);
 
-    // Create pincode (must persist pincode before assigning it to credit cards)
-    Pincode pincode = new Pincode();
-    pincode.setCode("123");
-    pincode.setCount(1);
+    card1.setPincode(pin);
+    card1.setOwningBank(bank);
+    card2.setPincode(pin);
+    card2.setOwningBank(bank);
 
-    // Persist the pincode first
-    em.persist(pincode);
+    bank.getOwnedCards().add(card1);
+    bank.getOwnedCards().add(card2);
 
-    // Create first credit card
-    CreditCard firstCard = new CreditCard();
-    firstCard.setNumber(12345);
-    firstCard.setBalance(-5000);
-    firstCard.setCreditLimit(-10000);
-    firstCard.setOwningBank(bank); // Reference the saved bank
-    firstCard.setPincode(pincode); // Reference the saved pincode
+    owner.getAddresses().add(address);
+    owner.getCreditCards().add(card1);
+    owner.getCreditCards().add(card2);
 
-    // Create second credit card
-    CreditCard secondCard = new CreditCard();
-    secondCard.setNumber(123);
-    secondCard.setBalance(1);
-    secondCard.setCreditLimit(2000);
-    secondCard.setOwningBank(bank); // Reference the saved bank
-    secondCard.setPincode(pincode); // Reference the saved pincode
-
-    // Assign credit cards to customer
-    customer.setCreditCards(Arrays.asList(firstCard, secondCard));
-
-    // Persist the customer and all related entities
-    em.persist(customer);
+    address.getOwners().add(owner);
   }
 }

@@ -1,6 +1,7 @@
 package no.hvl.dat250.jpa.tutorial.creditcards;
 
-import java.util.Collection;
+import java.util.*;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -12,8 +13,8 @@ public class Address {
     private Integer number;
 
 
-    @OneToMany(mappedBy = "addresses")
-    private Collection<Customer> owners;
+    @ManyToMany(mappedBy = "addresses")
+    private Set<Customer> owners = new HashSet<>();
 
     public String getStreet() {
         // TODO: implement method!
@@ -34,12 +35,12 @@ public class Address {
         this.number = number;
     }
 
-    public Collection<Customer> getOwners() {
+    public Set<Customer> getOwners() {
         // TODO: implement method!
         return owners;
     }
 
-    public void setOwners(Collection<Customer> owners) {
+    public void setOwners(Set<Customer> owners) {
         this.owners = owners;
     }
 }
