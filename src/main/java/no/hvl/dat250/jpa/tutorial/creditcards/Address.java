@@ -17,7 +17,6 @@ public class Address {
     private Set<Customer> owners = new HashSet<>();
 
     public String getStreet() {
-        // TODO: implement method!
         return street;
     }
 
@@ -26,7 +25,6 @@ public class Address {
     }
 
     public Integer getNumber() {
-        // TODO: implement method!
         return number;
     }
 
@@ -36,7 +34,6 @@ public class Address {
     }
 
     public Set<Customer> getOwners() {
-        // TODO: implement method!
         return owners;
     }
 

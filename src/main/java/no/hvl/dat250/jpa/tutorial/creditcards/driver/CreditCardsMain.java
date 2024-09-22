@@ -43,7 +43,7 @@ public class CreditCardsMain {
       em.getTransaction().commit();
 
       // Keep the program alive to access the console
-      Thread.sleep(600000);  // Sleep for 10 minutes (adjust as necessary)
+      Thread.sleep(60);  // Sleep for 10 minutes (adjust as necessary)
 
     } catch (SQLException | InterruptedException e) {
       e.printStackTrace();
@@ -65,7 +65,6 @@ public class CreditCardsMain {
   }
 
   private static void createObjects(EntityManager em) {
-    // TODO: Create object world as shown in the README.md.
     Customer owner = new Customer();
     owner.setName("Max Mustermann");
     em.persist(owner);

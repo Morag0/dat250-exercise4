@@ -20,14 +20,15 @@ public class CreditCard {
 
 
     @ManyToOne
+    @JoinColumn(name = "pincode_id")
     private Pincode pincode;
 
     @ManyToOne
+    @JoinColumn(name = "owningBank_id")
     private Bank owningBank;
 
 
     public Integer getNumber() {
-        // TODO: implement method!
         return number;
     }
 
@@ -36,7 +37,6 @@ public class CreditCard {
     }
 
     public Integer getBalance() {
-        // TODO: implement method!
         return balance;
     }
 
@@ -45,7 +45,6 @@ public class CreditCard {
     }
 
     public Integer getCreditLimit() {
-        // TODO: implement method!
         return creditLimit;
     }
 
@@ -54,7 +53,6 @@ public class CreditCard {
     }
 
     public Pincode getPincode() {
-        // TODO: implement method!
         return pincode;
     }
 
@@ -63,12 +61,12 @@ public class CreditCard {
     }
 
     public Bank getOwningBank() {
-        // TODO: implement method!
         return owningBank;
     }
 
     public void setOwningBank(Bank bank) {
-        this.owningBank = owningBank;
+        this.owningBank = bank;
+
     }
 
 
