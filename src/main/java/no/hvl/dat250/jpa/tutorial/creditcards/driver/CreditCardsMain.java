@@ -4,7 +4,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import no.hvl.dat250.jpa.tutorial.creditcards.*;
+import org.h2.tools.Server;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -13,14 +17,51 @@ public class CreditCardsMain {
   static final String PERSISTENCE_UNIT_NAME = "jpa-tutorial";
 
   public static void main(String[] args) {
-    try (EntityManagerFactory factory = Persistence.createEntityManagerFactory(
-        PERSISTENCE_UNIT_NAME); EntityManager em = factory.createEntityManager()) {
+    Server h2Server = null;
+    EntityManagerFactory factory = null;
+    EntityManager em = null;
+
+    try {
+      // Start H2 connection for schema creation
+      Connection conn = DriverManager.getConnection(
+              "jdbc:h2:file:./DB;INIT=CREATE SCHEMA IF NOT EXISTS baeldung",
+              "sa",
+              "");
+      conn.close();
+
+      // Start H2 web console
+      h2Server = Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082").start();
+      System.out.println("H2 web console started at http://localhost:8082");
+
+      // Create the EntityManagerFactory and EntityManager
+      factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
+      em = factory.createEntityManager();
+
+      // Begin transaction and create objects
       em.getTransaction().begin();
       createObjects(em);
       em.getTransaction().commit();
 
-    }
+      // Keep the program alive to access the console
+      Thread.sleep(600000);  // Sleep for 10 minutes (adjust as necessary)
 
+    } catch (SQLException | InterruptedException e) {
+      e.printStackTrace();
+    } finally {
+      // Close EntityManager and EntityManagerFactory
+      if (em != null) {
+        em.close();
+      }
+      if (factory != null) {
+        factory.close();
+      }
+
+      // Stop the H2 web server if it was started
+      if (h2Server != null) {
+        h2Server.stop();
+        System.out.println("H2 web console stopped.");
+      }
+    }
   }
 
   private static void createObjects(EntityManager em) {
